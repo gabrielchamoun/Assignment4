@@ -13,7 +13,9 @@ C1 = 0.25;
 L1 = 0.2;
 alpha = 100;
 
-% MNA Formulation
+%-----------------------------------------------------------
+% MNA Formulation:
+%-----------------------------------------------------------
 F = [0;0;0;0;0;1;0;0];  % Stimuli
 
 G = [   % Conductance
@@ -21,10 +23,10 @@ G = [   % Conductance
     -1/R1,1/R1+1/R2,0,0,0,0,1,0;
     0,0,1/R3,0,0,0,-1,0;
     0,0,0,1/R4,-1/R4,0,0,1;
-    0,0,0,-1/R4,1/R4-1/R0,0,0,0;
+    0,0,0,-1/R4,1/R4+1/R0,0,0,0;
     1,0,0,0,0,0,0,0;
     0,1,-1,0,0,0,0,0;
-    0,0,alpha/R3,1,0,0,0,0;
+    0,0,-alpha/R3,1,0,0,0,0;
     ];
 
 C = [   % Energy Storage
@@ -38,7 +40,9 @@ C = [   % Energy Storage
     0,0,0,0,0,0,0,0;
     ];
 
-% DC Sweep from -10V to 10V
+%-----------------------------------------------------------
+% DC Sweep from -10V to 10V:
+%-----------------------------------------------------------
 s = 0;
 vin = linspace(-10,10,100);
 V3 = zeros(size(vin));
@@ -56,7 +60,9 @@ hold off
 xlabel('Input Voltage @node#1','FontSize',12);
 legend('V3','V0'), title('DC Sweep', 'FontSize',14);
 
-% AC Sweep
+%-----------------------------------------------------------
+% AC Sweep:
+%-----------------------------------------------------------
 f = linspace(0.001, 100, 100000);
 V0 = zeros(size(f));
 for i = 1:size(f,2)
@@ -66,6 +72,10 @@ for i = 1:size(f,2)
     V0(i) = V(5);
 end
 
+
+%-----------------------------------------------------------
+% Plotting:
+%-----------------------------------------------------------
 % Plotting AC response of output magnitude
 figure("Name","AC Sweep")
 plot(2*pi*f,abs(V0),'k',"LineWidth",2);
@@ -81,8 +91,9 @@ title('Frequency Response', 'FontSize',12);
 xlabel('Frequency  (Hz)','FontSize',12);
 ylabel('V_{out}/V_{1}  (dB)','FontSize',12);
 
-
-% Monte Carlo Analysis of C
+%-----------------------------------------------------------
+% Monte Carlo Analysis of C:
+%-----------------------------------------------------------
 s = 1i*pi;
 C1_dist = C1 + 0.05 * randn(1000,1);
 V0 = zeros(size(C1_dist));
@@ -99,6 +110,6 @@ figure("Name","Monte Carlo Analysis of C")
 subplot(1,2,1), histogram(C1_dist);
 title('C Distribution', 'FontSize',14);
 xlabel('C (F)','FontSize',12);
-subplot(1,2,2), histogram(20*log(abs(V0));
+subplot(1,2,2), histogram(20*log(abs(V0)));
 title('Output Distribution', 'FontSize',14);
 xlabel('V_{out} (V)','FontSize',12);
